@@ -1,0 +1,46 @@
+# Ignore node modules
+node_modules
+
+# Ignore build output
+dist
+build
+coverage
+
+# Ignore environment files
+.env
+.env.*   # like .env.local, .env.development
+
+# Ignore lock files (optional)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore logs
+*.log
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore version control folders
+.git
+.gitignore
+
+# Ignore next.js or similar app-specific folders
+.next
+out
+
+# Ignore IDE/editor folders
+.vscode
+.idea
+
+# Ignore compiled JS if you're writing in TS
+*.js
+*.jsx
+
+# Ignore public assets (optional)
+public
+
+# Optional: Ignore tests (if you don't want formatting there)
+# __tests__/
+# *.test.js
