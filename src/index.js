@@ -1,11 +1,19 @@
 import dotenv from 'dotenv';
 import express from 'express'
+import { app } from './app.js';
 import { DB_NAME } from './constants.js'
 import connectdb from './db/database.js'
 
-dotenv.config({ path: './env' });
+dotenv.config({ path: './public/temp/.env' });
 
 
 
 
-connectdb()
+connectdb().then(()=>{
+    app.listen(process.env.PORT,()=>{
+        console.log(`Database is connected ${process.env.PORT}`)
+    })
+}).catch((error)=>{
+    console.log("Database is not connected");
+    
+})
