@@ -16,4 +16,10 @@ app.use(express.urlencoded({ extended: true })); // ✅ Best practice: explicitl
 app.use(express.static("public"));               
 app.use(cookieParser());
 
+
+// routes import
+import userroutes from './routers/user.routes.js'
+
+app.use('/api/user',userroutes)
+
 export { app };
