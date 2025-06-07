@@ -13,7 +13,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // ✅ Best practice: explicitly set extended
-app.use(express.static("public"));               // ✅ Folder names should be lowercase (optional)
+app.use(express.static("public"));               
 app.use(cookieParser());
 
 export { app };
