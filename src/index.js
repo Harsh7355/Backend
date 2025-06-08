@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
 import express from 'express'
 import { app } from './app.js';
+import path from "path";
 import { DB_NAME } from './constants.js'
 import connectdb from './db/database.js'
 
-dotenv.config({ path: './public/temp/.env' });
+dotenv.config({ path: path.resolve("Public/temp/.env") });
 
 
 

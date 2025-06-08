@@ -14,14 +14,13 @@ const registeruser = asynchandler( async(req,res)=> {
    // remove password and refreshtoken from field
    // check response is created or not if it is then return the user
 
-   const{fullName,email,username,password}=req.body;
-   console.log(email);
+   const{fullname,email,username,password}=req.body;
 
-   if([fullName,email,username,password].some((field)=>field?.trim()==="")){
+   if([fullname,email,username,password].some((field)=>field?.trim()==="")){
       throw new ApiError(400,"ALL FIELDS ARE MANDATORY")
    }
 
-   const userexist=await user.findOne({$or:[email,username]});
+   const userexist=await user.findOne({$or:[{email},{username}]});
 
    if(userexist){
       throw new ApiError(400,"user with email or username is already exist")
@@ -33,7 +32,7 @@ const registeruser = asynchandler( async(req,res)=> {
     if(!avatarfieldpath){
       throw new ApiError(400,"Avatar file is not uploaded")
     }
-
+    
     const avatar=await uploadonclouidnary(avatarfieldpath);
     const coverimage=await uploadonclouidnary(coverfieldpath);
 
@@ -41,17 +40,17 @@ const registeruser = asynchandler( async(req,res)=> {
       throw new ApiError(400,"Avatar file is not uploaded")
     }
 
-    const user=await user.create({
-          fullName,
-          avatar:avatar.url,
-          coverimage:coverimage?.url || "",
-          email,
-          password,
-          username:username.tolowercase(),
-       })
+const userinstance = await user.create({
+  fullname,
+  avatar: avatar.url,
+  coverimage: coverimage?.url || "",
+  email,
+  password,
+  username: username.toLowerCase(),
+});
 
-     const usercreated=await user.findById(user._id).select({password:0},{refreshtoken:0})
-      
+     const usercreated = await user.findById(userinstance._id).select({ password: 0, refreshtoken: 0 });
+
      if(!usercreated){
       throw new ApiError(500,"something went wrong while register the user")
      }
