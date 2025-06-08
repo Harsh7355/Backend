@@ -11,7 +11,7 @@ const jwtverify = asynchandler( async (req,res,next)=>{
      }
   
      const decoded_token=jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
-     console.log(decoded_token)
+    //  console.log(decoded_token)
      const userinstance=await user.findById(decoded_token?.userid).select({password:0 ,refreshtoken:0})
      
      if(!userinstance){
