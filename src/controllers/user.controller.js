@@ -5,6 +5,7 @@ import uploadonclouidnary from '../utils/clouidnary.js'
 import ApiResponse from '../utils/ApiResponse.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import _ from 'mongoose-paginate-v2'
 
 const generateAccessAndRefreshToken = async (userid) => {
   try {
@@ -187,4 +188,95 @@ const refreshaccesstoken = asynchandler( async(req,res) =>{
    }
 
    } )
-export{registeruser,loginuser,logoutuser,refreshaccesstoken}
+
+  const changecurrentpassword =asynchandler( async(req,res) =>{
+      //  required fields  like oldpassword or confirmpassword
+      //  check this fields is in our model or not if not then give me a error
+      //  set a new password
+      // const {oldpassword,newpassword,confirmpassword}=req.body;
+
+      const{oldpassword,newpassword}=req.body;
+
+      // if((newpassword===confirmpassword)){
+      //   throw new ApiError(400,"please enter both the password should be same")
+      // }
+      const user =await user.findById(req.user?._id)
+      const isposswordcorrect=user.ispassword(oldpassword);
+
+      if(!isposswordcorrect){
+          throw new ApiError(400,"old password is incorrect")
+      }
+      
+      user.password=newpassword
+      await user.save({validateBeforeSave:false})
+
+      return res.status(200).json(new ApiResponse(200,"Password changes successfully",{}))
+  } )
+
+  const getcurrentuser = asynchandler( async(req,res)=>{
+      const user=req.user;
+      return res.status(200).json(200,user,"current user fetch successfully")
+  })
+
+  const updateaccountdetails = asynchandler( async(req,res)=>{
+      const {fullname,email,username }=req.body;
+       
+      if((!fullname || !email || !username)){
+        throw new ApiError(400,"Plsz fill the details first")
+      }
+
+       const userinstance=await user.findByIdAndUpdate(
+        req.user?._id,
+        {$set:{fullname,email:email,username:username}},
+        {new:true}).select({password:0,refreshtoken:0} 
+        )
+
+        return res.status(200).json(
+          new ApiResponse(200,userinstance,"Account details updated")
+        )
+  })
+
+// use two middleware firstly multer and authmiddleware 
+  const avatarupdated =asynchandler( async (req,res)=>{
+    
+    const avatarlocalpath=req.file?.path;
+    if(!avatarlocalpath){
+      throw new ApiError(400,"avater path is missing")
+    }
+
+    const avatar=uploadonclouidnary(avatarlocalpath)
+    if(!avatar.url){
+      throw new ApiError(400,"avater  is missing")
+    }
+
+    const userinstance=await user.findByIdAndUpdate(req.user?._id,{ $set:{avatar:avatar.url}},{new:true}).select({password:0,refreshtoken:0})
+
+    return res.status(200).json(
+      new ApiResponse(200).json(
+          200,userinstance,"Avatar is updated"
+      )
+    )
+  })
+
+// two middleware use multer and authmiddleware
+  const coverimageupdate = asynchandler ( async(req,res) =>{
+       const coverimagelocalpath=req.file?.path
+       if(!coverimagelocalpath){
+        throw new ApiError(400,"Coverimage path is missing")
+       }
+
+       const coverimage=uploadonclouidnary(coverimagelocalpath)
+       if(!coverimage){
+        throw new ApiError(400,"coverimage is missing")
+       }
+
+       const userinstance=await user.findByIdAndUpdate(req.user?._id,{ $set:{coverimage} },{new:true}).select({password:0,refreshtoken:0})
+
+        return res.status(200).json(
+      new ApiResponse(200).json(
+          200,userinstance,"Cover Image is updated"
+      )
+    )
+  })
+
+export{registeruser,loginuser,logoutuser,refreshaccesstoken,getcurrentuser,changecurrentpassword,updateaccountdetails,avatarupdated,coverimageupdate}
