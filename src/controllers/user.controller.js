@@ -99,9 +99,9 @@ const loginuser = asynchandler( async(req,res)=> {
    const{username,email,password}= req.body;
    console.log(username ,email,password)
 
-   if([username,email,password].some((fields)=>fields?.trim()==="")){
-       throw new ApiError(400,"username or email is mandatory")
-   }
+  if ([username, email, password].some(field => typeof field !== "string" || field.trim() === "")) {
+  throw new ApiError(400, "Username, email, and password are required and cannot be empty.");
+}
 
   //  const userexist=await user.findOne({ $or:[{username},{email},{password}]})
   const userexist = await user.findOne({
