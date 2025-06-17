@@ -24,9 +24,15 @@ import videoroutes from './routers/video.routes.js'
 import twitterroutes from './routers/twitter.router.js'
 import commentroutes from './routers/comment.router.js'
 import subscriberroutes from './routers/subscriber.router.js'
+import palylistroutes from './routers/playlist.router.js'
+// import like from './routers/like.router.js'
+
 app.use('/api/user',userroutes)
 app.use('/api/video',videoroutes)
 app.use('/api/twitter',twitterroutes)
 app.use('/api/comment',commentroutes)
 app.use('/api/subscriber',subscriberroutes)
+app.use('/api/playlist',palylistroutes)
+// app.use('/api/like',likeroutes)
+
 export default app;
