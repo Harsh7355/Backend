@@ -8,17 +8,17 @@ const likeSchema=new mongoose.Schema({
     },
 
     video:{
-        type:Object.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"Video",
     },
     
     likeby:{
-        type:Object.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"User",
     },
 
     tweet:{
-        type:Object.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"Tweet",
     }
     
