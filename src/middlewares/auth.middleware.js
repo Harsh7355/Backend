@@ -15,7 +15,6 @@ const jwtverify = asynchandler( async (req,res,next)=>{
      const userinstance=await user.findById(decoded_token?.userid).select({password:0 ,refreshtoken:0})
      
      if(!userinstance){
-      // todos discuss about frontend
       throw new ApiErrors(401,"Invalid access")
      }
   
